@@ -1,0 +1,47 @@
+﻿@model Dev.LeaveApplication.Web.Models.ApprovalEditViewModels;
+
+
+
+<h3>Approval Page</h3>
+
+
+<table class="table table-bordered">
+
+	<thead>
+		<tr>
+
+			<th>Employee Name</th>
+			<th>Start Date and Time</th>
+			<th>End Date and Time</th>
+			<th>Justification</th>
+			<th>Status</th>
+			<th>Created Date</th>
+			<th>Actions</th>
+
+		</tr>
+	</thead>
+
+	<tbody>
+
+		@foreach (var itm in Model.ApprovalModels)
+		{
+			<tr>
+				<td>@itm.EmployeeName</td>
+				<td>@itm.StartDatetime</td>
+				<td>@itm.EndDatetime</td>
+				<td>@itm.Justification</td>
+				<td>@itm.StatusDescription</td>
+				<td>@itm.CreatedDate</td>
+				<td>
+					<button class="btn btn-success btn-sm" type="submit">Approve</button>
+					<button class="btn btn-danger btn-sm" type="submit">Approve</button>
+				</td>
+			</tr>
+		}
+
+	</tbody>
+
+
+</table>
+
+

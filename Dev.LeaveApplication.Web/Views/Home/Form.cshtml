@@ -1,0 +1,50 @@
+﻿@model Dev.LeaveApplication.Web.Models.FormEditViewModel;
+
+
+<div>
+	<h3>Leave Application Form</h3>
+</div>
+
+@using (Html.BeginForm())
+{
+
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+	<div class="form-floating mb-3">
+		@Html.TextBoxFor(m => m.EmployeeName, new { @class = "form-control", @placeholder = "EmployeeName" })
+		@Html.LabelFor(m => m.EmployeeName)
+	</div>
+
+	<div class="row g-2 mb-3">
+		<div class="col-md">
+			<div class="form-floating">
+				@Html.EditorFor(m => m.StartDatetime, new { htmlAttributes = new { @class = "form-control", @type = "datetime-local", @placeholder = "StartDatetime" } })
+				@Html.LabelFor(m => m.StartDatetime)
+			</div>
+		</div>
+
+		<div class="col-md">
+			<div class="form-floating">
+				@Html.EditorFor(m => m.EndDatetime, new { htmlAttributes = new { @class = "form-control", @type = "datetime-local", @placeholder = "EndDatetime" } })
+				@Html.LabelFor(m => m.EndDatetime)
+			</div>
+		</div>
+	</div>
+
+	<div class="form-floating mb-3">
+		@Html.TextAreaFor(m => m.Justification, new { @class = "form-control", @placeholder = "Justification" })
+		@Html.LabelFor(m => m.Justification)
+	</div>
+
+	<div class="form-floating mb-3">
+		@Html.DropDownListFor(m => m.ManagerId, Model.Managers, new { @class = "form-select", @placeholder = "ManagerId" })
+		@Html.LabelFor(m => m.ManagerId)
+	</div>
+
+	<div class="d-grip gap-2 d-md-flex justify-content-md-end">
+		<button class="btn btn-secondary me-md-2" type="reset">Cancel</button>
+		<button class="btn btn-primary" type="submit">Submit</button>
+	</div>
+
+}
