@@ -16,7 +16,7 @@ public class FormManager : IFormManager
 
 	public bool SubmitLeaveApplicationForm(FormModel model)
 	{
-		_dbContext.LeaveApplication.Add(model);
+		_dbContext.Applications.Add(model);
 		_dbContext.SaveChanges();
 
 		return true;
@@ -24,7 +24,7 @@ public class FormManager : IFormManager
 
 	public bool UpdateLeaveApplicationForm(FormModel model)
 	{
-		_dbContext.LeaveApplication.Update(model);
+		_dbContext.Applications.Update(model);
 		_dbContext.SaveChanges();
 
 		return true;
@@ -32,7 +32,7 @@ public class FormManager : IFormManager
 
 	public bool WithdrawLeaveApplicationForm(Guid formId, Guid employeeId)
 	{
-		var leaveApplication = _dbContext.LeaveApplication.Find(formId);
+		var leaveApplication = _dbContext.Applications.Find(formId);
 		if (leaveApplication == null)
 			return false;
 
@@ -40,7 +40,7 @@ public class FormManager : IFormManager
 		leaveApplication.LastModifiedDate = DateTime.Now;
 		leaveApplication.LastModifiedBy = employeeId;
 
-		_dbContext.LeaveApplication.Update(leaveApplication);
+		_dbContext.Applications.Update(leaveApplication);
 		_dbContext.SaveChanges();
 
 		return true;

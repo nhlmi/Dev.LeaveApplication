@@ -1,6 +1,8 @@
 using Dev.LeaveApplication.Data.Database;
-using Dev.LeaveApplication.Data.Managers.Interfaces;
 using Dev.LeaveApplication.Data.Managers;
+using Dev.LeaveApplication.Data.Managers.Interfaces;
+using Dev.LeaveApplication.Web.Managers;
+using Dev.LeaveApplication.Web.Managers.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,12 @@ builder.Services.AddDbContext<LeaveApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IFormManager, FormManager>();
 builder.Services.AddScoped<IEmployeeManager, EmployeeManager>();
+
+builder.Services.AddScoped<IFormService, FormService>();
+
+
+//AutoMapper
+builder.Services.AddAutoMapper(typeof(Program));
 
 
 var app = builder.Build();

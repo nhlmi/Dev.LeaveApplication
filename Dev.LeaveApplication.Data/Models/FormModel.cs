@@ -6,11 +6,12 @@ namespace Dev.LeaveApplication.Data.Models;
 public class FormModel
 {
 	[Key]
-	public Guid FormId { get; set; }
+	public Guid ApplicationId { get; set; }
 	public Guid EmployeeId { get; set; }
 	public DateTime StartDatetime { get; set; }
 	public DateTime EndDatetime { get; set; }
 	public string Justification { get; set; }
+	public Guid ManagerEmployeeId { get; set; }
 	public LeaveStatus Status { get; set; }
 	public DateTime CreatedDate { get; set; }
 	public Guid CreatedBy { get; set; }

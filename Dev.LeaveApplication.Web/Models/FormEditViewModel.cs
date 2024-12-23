@@ -7,12 +7,12 @@ namespace Dev.LeaveApplication.Web.Models;
 public class FormEditViewModel
 {
 	public Guid FormId { get; set; }
-	public Guid EmployeeId { get; set; }
 
 	[Required]
 	[Display(Name = "Employee Name")]
-	[MaxLength(50, ErrorMessage = "'{0}' is limited to {1} characters.")]
-	public string EmployeeName { get; set; }
+	public Guid EmployeeId { get; set; }
+
+	public IEnumerable<SelectListItem> Employees { get; set; } = [];
 
 	[Required]
 	[Display(Name = "Start Date and Time")]
@@ -31,12 +31,19 @@ public class FormEditViewModel
 
 	[Required]
 	[Display(Name = "Manager Name")]
-	public Guid ManagerId { get; set; }
+	public Guid ManagerEmployeeId { get; set; }
+
 	public IEnumerable<SelectListItem> Managers { get; set; } = [];
+
 	public LeaveStatus Status { get; set; }
-	public string StatusDescription { get; set; }
+
+	public string? StatusDescription { get; set; }
+
 	public DateTime CreatedDate { get; set; }
+
 	public Guid CreatedBy { get; set; }
+
 	public DateTime LastModifiedDate { get; set; }
+
 	public Guid LastModifiedBy { get; set; }
 }

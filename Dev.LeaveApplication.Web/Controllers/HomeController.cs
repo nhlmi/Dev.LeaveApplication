@@ -1,5 +1,5 @@
 using Dev.LeaveApplication.Data.Managers.Interfaces;
-using Dev.LeaveApplication.Data.Shared;
+using Dev.LeaveApplication.Web.Managers.Interfaces;
 using Dev.LeaveApplication.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,11 +11,15 @@ namespace Dev.LeaveApplication.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 		private readonly IEmployeeManager _employeeManager;
+		private readonly IFormService _formService;
 
-		public HomeController(ILogger<HomeController> logger, IEmployeeManager employeeManager)
+		public HomeController(ILogger<HomeController> logger, 
+			IEmployeeManager employeeManager,
+			IFormService formService)
         {
             _logger = logger;
 			_employeeManager = employeeManager;
+			_formService = formService;
 		}
 
         public IActionResult Index()
@@ -34,16 +38,23 @@ namespace Dev.LeaveApplication.Web.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-		public IActionResult Form()
+		public IActionResult Form(FormEditViewModel model)
 		{
-			FormEditViewModel model = new();
-
-			model.Managers = _employeeManager.GetAllManagers()
+			var employees = _employeeManager.GetAllEmployees()
 				.Select(x => new SelectListItem
 				{
 					Value = x.EmployeeId.ToString(),
 					Text = x.EmployeeName
 				});
+			var managers = _employeeManager.GetAllManagers()
+				.Select(x => new SelectListItem
+				{
+					Value = x.EmployeeId.ToString(),
+					Text = x.EmployeeName
+				});
+
+			model.Employees = employees;
+			model.Managers = managers;
 
 			return View(model);
 		}
@@ -52,18 +63,11 @@ namespace Dev.LeaveApplication.Web.Controllers
 		public IActionResult SubmitForm(FormEditViewModel model)
 		{
 			if (!ModelState.IsValid)
-				return View("Form", model);
+				return RedirectToAction("Form", model);
 
+			_formService.SubmitLeaveApplicationForm(model);
 
-			var test = Guid.NewGuid();
-
-			model.Status = LeaveStatus.Submitted;
-			model.CreatedDate = DateTime.Now;
-			model.CreatedBy = test;
-			model.LastModifiedDate = DateTime.Now;
-			model.LastModifiedBy = test;
-
-			return View("Form");
+			return View("Index");
 		}
 
 		public IActionResult Approval()

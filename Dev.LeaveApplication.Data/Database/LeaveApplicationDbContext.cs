@@ -10,6 +10,6 @@ public class LeaveApplicationDbContext : DbContext
 	{
 	}
 
-	public DbSet<FormModel> LeaveApplication { get; set; }
+	public DbSet<FormModel> Applications { get; set; }
 	public DbSet<EmployeeModel> Employees { get; set; }
 }

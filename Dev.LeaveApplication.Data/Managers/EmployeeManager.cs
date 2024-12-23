@@ -13,6 +13,18 @@ public class EmployeeManager : IEmployeeManager
 		_dbContext = dbContext;
 	}
 
+	public List<EmployeeModel> GetAllEmployees()
+	{
+		return _dbContext.Employees
+			.Select(x => new EmployeeModel()
+			{
+				EmployeeId = x.EmployeeId,
+				EmployeeName = x.EmployeeName
+			})
+			.OrderBy(x => x.EmployeeName)
+			.ToList();
+	}
+
 	public List<EmployeeModel> GetAllManagers()
 	{
 		return _dbContext.Employees
