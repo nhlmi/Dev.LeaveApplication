@@ -2,9 +2,5 @@
 
 public class ApprovalEditViewModel : FormEditViewModel
 {
-}
-
-public class ApprovalEditViewModels
-{
-	public List<ApprovalEditViewModel> ApprovalModels { get; set; } = [];
+	public string EmployeeName { get; set; }
 }

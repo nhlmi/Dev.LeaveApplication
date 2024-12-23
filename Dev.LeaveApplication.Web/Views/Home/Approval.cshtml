@@ -1,4 +1,4 @@
-﻿@model Dev.LeaveApplication.Web.Models.ApprovalEditViewModels;
+﻿@model List<Dev.LeaveApplication.Web.Models.ApprovalEditViewModel>;
 
 
 
@@ -10,6 +10,7 @@
 	<thead>
 		<tr>
 
+			<th>Application Id</th>
 			<th>Employee Name</th>
 			<th>Start Date and Time</th>
 			<th>End Date and Time</th>
@@ -23,14 +24,15 @@
 
 	<tbody>
 
-		@foreach (var itm in Model.ApprovalModels)
+		@foreach (var itm in Model)
 		{
 			<tr>
-				<td>@itm.EmployeeId</td>
+				<td>@itm.ApplicationId</td>
+				<td>@itm.EmployeeName</td>
 				<td>@itm.StartDatetime</td>
 				<td>@itm.EndDatetime</td>
 				<td>@itm.Justification</td>
-				<td>@itm.StatusDescription</td>
+				<td>@itm.Status</td>
 				<td>@itm.CreatedDate</td>
 				<td>
 					<button class="btn btn-success btn-sm" type="submit">Approve</button>

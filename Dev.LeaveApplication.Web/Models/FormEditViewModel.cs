@@ -6,7 +6,7 @@ namespace Dev.LeaveApplication.Web.Models;
 
 public class FormEditViewModel
 {
-	public Guid FormId { get; set; }
+	public Guid ApplicationId { get; set; }
 
 	[Required]
 	[Display(Name = "Employee Name")]
@@ -36,8 +36,6 @@ public class FormEditViewModel
 	public IEnumerable<SelectListItem> Managers { get; set; } = [];
 
 	public LeaveStatus Status { get; set; }
-
-	public string? StatusDescription { get; set; }
 
 	public DateTime CreatedDate { get; set; }
 

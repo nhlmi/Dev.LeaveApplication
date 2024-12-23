@@ -14,6 +14,11 @@ public class FormManager : IFormManager
 		_dbContext = dbContext;
 	}
 
+	public List<FormModel> GetAllApplications()
+	{
+		return _dbContext.Applications.ToList();
+	}
+
 	public bool SubmitLeaveApplicationForm(FormModel model)
 	{
 		_dbContext.Applications.Add(model);

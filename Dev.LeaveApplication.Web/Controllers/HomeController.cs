@@ -72,9 +72,9 @@ namespace Dev.LeaveApplication.Web.Controllers
 
 		public IActionResult Approval()
 		{
-			ApprovalEditViewModels models = new();
+			var list = _formService.GetAllApplications();
 
-			return View(models);
+			return View(list);
 		}
 	}
 }

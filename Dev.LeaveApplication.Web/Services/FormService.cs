@@ -10,12 +10,41 @@ namespace Dev.LeaveApplication.Web.Managers;
 public class FormService : IFormService
 {
 	private readonly IFormManager _formManager;
+	private readonly IEmployeeManager _employeeManager;
 	private readonly IMapper _mapper;
 
-	public FormService(IFormManager formManager, IMapper mapper)
+	public FormService(IFormManager formManager,
+		IEmployeeManager employeeManager,
+		IMapper mapper)
 	{
 		_formManager = formManager;
+		_employeeManager = employeeManager;
 		_mapper = mapper;
+	}
+
+	public List<ApprovalEditViewModel> GetAllApplications()
+	{
+		var applications = _formManager.GetAllApplications();
+		var employees = _employeeManager.GetAllEmployees();
+
+		var list = (from application in applications
+					join employee in employees on application.EmployeeId equals employee.EmployeeId
+					select new ApprovalEditViewModel
+					{
+						ApplicationId = application.ApplicationId,
+						EmployeeId = application.EmployeeId,
+						EmployeeName = employee.EmployeeName,
+						StartDatetime = application.StartDatetime,
+						EndDatetime = application.EndDatetime,
+						Justification = application.Justification,
+						CreatedDate = application.CreatedDate,
+						LastModifiedDate = application.LastModifiedDate,
+						Status = application.Status
+					})
+					.OrderByDescending(x => x.CreatedDate)
+					.ToList();
+
+		return list;
 	}
 
 	public bool SubmitLeaveApplicationForm(FormEditViewModel model)
