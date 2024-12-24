@@ -4,6 +4,7 @@ using Dev.LeaveApplication.Data.Models;
 using Dev.LeaveApplication.Data.Shared;
 using Dev.LeaveApplication.Web.Managers.Interfaces;
 using Dev.LeaveApplication.Web.Models;
+using Dev.LeaveApplication.Web.Services.Interfaces;
 
 namespace Dev.LeaveApplication.Web.Managers;
 
@@ -12,14 +13,17 @@ public class FormService : IFormService
 	private readonly IFormManager _formManager;
 	private readonly IEmployeeManager _employeeManager;
 	private readonly IMapper _mapper;
+	private readonly IEmailService _emailService;
 
 	public FormService(IFormManager formManager,
 		IEmployeeManager employeeManager,
-		IMapper mapper)
+		IMapper mapper,
+		IEmailService emailService)
 	{
 		_formManager = formManager;
 		_employeeManager = employeeManager;
 		_mapper = mapper;
+		_emailService = emailService;
 	}
 
 	public bool ApproveLeaveApplicationForm(Guid applicationId, Guid managerEmployeeId)
@@ -31,7 +35,16 @@ public class FormService : IFormService
 		formModel.LastModifiedDate = DateTime.Now;
 		formModel.LastModifiedBy = managerEmployeeId;
 
-		return UpdateLeaveApplicationFormStatus(formModel);
+		var result = UpdateLeaveApplicationFormStatus(formModel);
+		if(!result) return false;
+
+		//Send Email to Employee
+		var employee = _employeeManager.FindEmployeeById(formModel.EmployeeId);
+		if(employee == null) return false;
+
+		_emailService.SendEmailAsync(employee.Email, "Leave Application Approved", "Your leave application has been approved.");
+
+		return result;
 	}
 
 	public List<ApprovalEditViewModel> GetAllApplications()
@@ -68,7 +81,16 @@ public class FormService : IFormService
 		formModel.LastModifiedDate = DateTime.Now;
 		formModel.LastModifiedBy = managerEmployeeId;
 
-		return UpdateLeaveApplicationFormStatus(formModel);
+		var result = UpdateLeaveApplicationFormStatus(formModel);
+		if(!result) return false;
+
+		//Send Email to Employee
+		var employee = _employeeManager.FindEmployeeById(formModel.EmployeeId);
+		if (employee == null) return false;
+
+		_emailService.SendEmailAsync(employee.Email, "Leave Application Rejected", "Your leave application has been rejected.");
+
+		return result;
 	}
 
 	public bool SubmitLeaveApplicationForm(FormEditViewModel model)
@@ -82,7 +104,15 @@ public class FormService : IFormService
 		formModel.LastModifiedBy = model.EmployeeId;
 		formModel.Status = LeaveStatus.Submitted;
 
-		return _formManager.SubmitLeaveApplicationForm(formModel);
+		var result = _formManager.SubmitLeaveApplicationForm(formModel);
+
+		//Send Email to Manager
+		var manager = _employeeManager.FindEmployeeById(model.ManagerEmployeeId);
+		if (manager == null) return false;
+
+		_emailService.SendEmailAsync(manager.Email, "Leave Application Submitted", "A new leave application has been submitted.");
+
+		return result;
 	}
 
 	private bool UpdateLeaveApplicationFormStatus(FormModel model)

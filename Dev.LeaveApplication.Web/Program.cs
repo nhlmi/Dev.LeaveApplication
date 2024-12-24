@@ -3,6 +3,8 @@ using Dev.LeaveApplication.Data.Managers;
 using Dev.LeaveApplication.Data.Managers.Interfaces;
 using Dev.LeaveApplication.Web.Managers;
 using Dev.LeaveApplication.Web.Managers.Interfaces;
+using Dev.LeaveApplication.Web.Services;
+using Dev.LeaveApplication.Web.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +20,7 @@ builder.Services.AddScoped<IFormManager, FormManager>();
 builder.Services.AddScoped<IEmployeeManager, EmployeeManager>();
 
 builder.Services.AddScoped<IFormService, FormService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 //AutoMapper

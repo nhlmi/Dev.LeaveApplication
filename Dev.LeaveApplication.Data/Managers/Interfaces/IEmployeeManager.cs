@@ -6,4 +6,5 @@ public interface IEmployeeManager
 {
 	List<EmployeeModel> GetAllManagers();
 	List<EmployeeModel> GetAllEmployees();
+	EmployeeModel FindEmployeeById(Guid employeeId);
 }

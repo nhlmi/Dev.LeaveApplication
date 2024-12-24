@@ -13,6 +13,11 @@ public class EmployeeManager : IEmployeeManager
 		_dbContext = dbContext;
 	}
 
+	public EmployeeModel FindEmployeeById(Guid employeeId)
+	{
+		return _dbContext.Employees.Find(employeeId);
+	}
+
 	public List<EmployeeModel> GetAllEmployees()
 	{
 		return _dbContext.Employees
