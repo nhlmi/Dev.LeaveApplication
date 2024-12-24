@@ -12,7 +12,6 @@
 
 	<script src="~/js/jquery-3.7.1.min.js"></script>
 
-
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -23,15 +22,35 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">My Leave</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Form">Leave Application Form</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Approval">Leave Application List</a>
-                        </li>
+
+                        @if(User.Identity.IsAuthenticated)
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">My Leave</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Form">Leave Application Form</a>
+                            </li>
+
+                            if(User.Claims.Any(c => c.Type.Equals("IsManager") && c.Value.Equals("True")))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Approval">Leave Application List</a>
+                                </li>
+                            }
+
+                            <li class="nav-item">
+                                <span class="navbar-text">Hello, @User.Identity.Name!</span>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-controller="User" asp-action="SignOut" method="post" class="form-inline">
+                                    <button type="submit" class="btn btn-link nav-link">Sign Out</button>
+                                </form>
+                            </li>
+
+                        }
+
                     </ul>
                 </div>
             </div>

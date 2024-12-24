@@ -12,4 +12,5 @@ public class LeaveApplicationDbContext : DbContext
 
 	public DbSet<FormModel> Applications { get; set; }
 	public DbSet<EmployeeModel> Employees { get; set; }
+	public DbSet<UserModel> Users { get; set; }
 }

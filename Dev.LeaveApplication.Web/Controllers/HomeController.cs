@@ -1,4 +1,5 @@
 using Dev.LeaveApplication.Data.Managers.Interfaces;
+using Dev.LeaveApplication.Web.Helpers;
 using Dev.LeaveApplication.Web.Managers.Interfaces;
 using Dev.LeaveApplication.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -70,6 +71,7 @@ namespace Dev.LeaveApplication.Web.Controllers
 			return View("Index");
 		}
 
+		[ManagerAuth]
 		[HttpGet]
 		public IActionResult Approval()
 		{
