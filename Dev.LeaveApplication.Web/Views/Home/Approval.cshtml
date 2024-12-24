@@ -1,5 +1,7 @@
-﻿@model List<Dev.LeaveApplication.Web.Models.ApprovalEditViewModel>;
-
+﻿
+ @{
+	var applications = ViewBag.Applications as List<Dev.LeaveApplication.Web.Models.ApprovalEditViewModel>;
+ }
 
 <h3>Leave Application List</h3>
 
@@ -23,27 +25,68 @@
 
 	<tbody>
 
-		@foreach (var itm in Model)
+		@if (applications != null)
 		{
-			<tr>
-				<td>@itm.ApplicationId</td>
-				<td>@itm.EmployeeName</td>
-				<td>@itm.StartDatetime</td>
-				<td>@itm.EndDatetime</td>
-				<td>@itm.Justification</td>
-				<td>@itm.Status</td>
-				<td>@itm.CreatedDate</td>
-				<td>
-					<button class="btn btn-success btn-sm" type="submit">Approve</button>
-					<button class="btn btn-danger btn-sm" type="submit">Reject</button>
-				</td>
-			</tr>
+			@foreach (var itm in applications)
+			{
+				<tr>
+					<td>@itm.ApplicationId</td>
+					<td>@itm.EmployeeName</td>
+					<td>@itm.StartDatetime</td>
+					<td>@itm.EndDatetime</td>
+					<td>@itm.Justification</td>
+					<td>@itm.Status</td>
+					<td>@itm.CreatedDate</td>
+					<td>
+						<button class="btn btn-success btn-sm approveButton" type="button" data-id="@itm.ApplicationId">Approve</button>
+						<button class="btn btn-danger btn-sm rejectButton" type="button" data-id="@itm.ApplicationId">Reject</button>
+					</td>
+				</tr>
+			}
 		}
 
 	</tbody>
 
-
 </table>
+
+
+<script>
+	$(document).ready(function() {
+		$('.approveButton').on('click', function() {
+			var applicationId = $(this).data('id');
+
+			console.log(applicationId);
+
+			$.ajax({
+				url: '@Url.Action("ApproveForm", "Home")',
+				type: 'POST',
+				data: JSON.stringify(applicationId),
+				contentType: 'application/json',
+				success: function(data) {
+					location.reload();
+				},
+				error: function(xhr, status, error) {
+				}
+			});
+		});
+
+		$('.rejectButton').on('click', function() {
+			var applicationId = $(this).data('id');
+			$.ajax({
+				url: '@Url.Action("RejectForm", "Home")',
+				type: 'POST',
+				data: JSON.stringify(applicationId),
+				contentType: 'application/json',
+				success: function(data) {
+					location.reload();
+				},
+				error: function(xhr, status, error) {
+				}
+			});
+		});
+	});
+</script>
+
 
 
 

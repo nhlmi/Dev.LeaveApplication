@@ -8,4 +8,5 @@ public interface IFormManager
 	bool UpdateLeaveApplicationForm(FormModel model);
 	bool WithdrawLeaveApplicationForm(Guid formId, Guid employeeId);
 	List<FormModel> GetAllApplications();
+	FormModel FindApplicationById(Guid applicationId);
 }

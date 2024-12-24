@@ -14,6 +14,11 @@ public class FormManager : IFormManager
 		_dbContext = dbContext;
 	}
 
+	public FormModel FindApplicationById(Guid applicationId)
+	{
+		return _dbContext.Applications.Find(applicationId);
+	}
+
 	public List<FormModel> GetAllApplications()
 	{
 		return _dbContext.Applications.ToList();

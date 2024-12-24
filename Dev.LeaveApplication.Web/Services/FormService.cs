@@ -22,6 +22,18 @@ public class FormService : IFormService
 		_mapper = mapper;
 	}
 
+	public bool ApproveLeaveApplicationForm(Guid applicationId, Guid managerEmployeeId)
+	{
+		var formModel = _formManager.FindApplicationById(applicationId);
+		if (formModel == null) return false;
+
+		formModel.Status = LeaveStatus.Approved;
+		formModel.LastModifiedDate = DateTime.Now;
+		formModel.LastModifiedBy = managerEmployeeId;
+
+		return UpdateLeaveApplicationFormStatus(formModel);
+	}
+
 	public List<ApprovalEditViewModel> GetAllApplications()
 	{
 		var applications = _formManager.GetAllApplications();
@@ -47,6 +59,18 @@ public class FormService : IFormService
 		return list;
 	}
 
+	public bool RejectLeaveApplicationForm(Guid applicationId, Guid managerEmployeeId)
+	{
+		var formModel = _formManager.FindApplicationById(applicationId);
+		if (formModel == null) return false;
+
+		formModel.Status = LeaveStatus.Rejected;
+		formModel.LastModifiedDate = DateTime.Now;
+		formModel.LastModifiedBy = managerEmployeeId;
+
+		return UpdateLeaveApplicationFormStatus(formModel);
+	}
+
 	public bool SubmitLeaveApplicationForm(FormEditViewModel model)
 	{
 		var formModel = _mapper.Map<FormModel>(model);
@@ -59,5 +83,10 @@ public class FormService : IFormService
 		formModel.Status = LeaveStatus.Submitted;
 
 		return _formManager.SubmitLeaveApplicationForm(formModel);
+	}
+
+	private bool UpdateLeaveApplicationFormStatus(FormModel model)
+	{
+		return _formManager.UpdateLeaveApplicationForm(model);
 	}
 }
