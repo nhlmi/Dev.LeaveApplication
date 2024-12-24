@@ -24,8 +24,6 @@ public class UserController : Controller
 		if(_userService.SignIn(username, HttpContext))
 			return RedirectToAction("Index", "Home");
 
-		ViewBag.ErrorMessage = "Invalid username";
-
 		return View();
 	}
 

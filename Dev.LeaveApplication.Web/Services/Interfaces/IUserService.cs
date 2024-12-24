@@ -7,4 +7,5 @@ public interface IUserService
 	bool IsSignedIn(HttpContext httpContext);
 	string GetSignedInUser(HttpContext httpContext);
 	bool IsManager(HttpContext httpContext);
+	Guid GetSignedInId(HttpContext httpContext);
 }

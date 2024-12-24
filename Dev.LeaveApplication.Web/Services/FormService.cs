@@ -14,16 +14,19 @@ public class FormService : IFormService
 	private readonly IEmployeeManager _employeeManager;
 	private readonly IMapper _mapper;
 	private readonly IEmailService _emailService;
+	private readonly IUserService _userService;
 
 	public FormService(IFormManager formManager,
 		IEmployeeManager employeeManager,
 		IMapper mapper,
-		IEmailService emailService)
+		IEmailService emailService,
+		IUserService userService)
 	{
 		_formManager = formManager;
 		_employeeManager = employeeManager;
 		_mapper = mapper;
 		_emailService = emailService;
+		_userService = userService;
 	}
 
 	public bool ApproveLeaveApplicationForm(Guid applicationId, Guid managerEmployeeId)
@@ -47,13 +50,15 @@ public class FormService : IFormService
 		return result;
 	}
 
-	public List<ApprovalEditViewModel> GetAllApplications()
+	public List<ApprovalEditViewModel> GetAllApplications(HttpContext httpContext)
 	{
 		var applications = _formManager.GetAllApplications();
 		var employees = _employeeManager.GetAllEmployees();
+		var managerEmployeeId = _userService.GetSignedInId(httpContext);
 
 		var list = (from application in applications
 					join employee in employees on application.EmployeeId equals employee.EmployeeId
+					where application.ManagerEmployeeId.Equals(managerEmployeeId)
 					select new ApprovalEditViewModel
 					{
 						ApplicationId = application.ApplicationId,

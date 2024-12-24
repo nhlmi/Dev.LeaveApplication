@@ -16,6 +16,16 @@ public class UserService : IUserService
 		_employeeManager = employeeManager;
 	}
 
+	public Guid GetSignedInId(HttpContext httpContext)
+	{
+		var claim = httpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("EmployeeId"));
+		if (claim == null) return Guid.Empty;
+
+		Guid.TryParse(claim.Value, out Guid employeeId);
+
+		return employeeId;
+	}
+
 	public string GetSignedInUser(HttpContext httpContext)
 	{
 		return httpContext.User.Identity.Name;
@@ -23,7 +33,7 @@ public class UserService : IUserService
 
 	public bool IsManager(HttpContext httpContext)
 	{
-		var claim = httpContext.User.Claims.FirstOrDefault(c => c.Type == "IsManager");
+		var claim = httpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("IsManager"));
 		return claim != null && bool.Parse(claim.Value);
 	}
 
@@ -46,7 +56,8 @@ public class UserService : IUserService
 		var claims = new List<Claim>
 		{
 			new (ClaimTypes.Name, employee.EmployeeName),
-			new ("IsManager", employee.IsManager.ToString())
+			new ("IsManager", employee.IsManager.ToString()),
+			new ("EmployeeId", employee.EmployeeId.ToString())
 		};
 
 		var claimsIdentity = new ClaimsIdentity(claims, "LeaveAppAuth");

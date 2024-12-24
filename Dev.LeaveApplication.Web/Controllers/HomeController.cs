@@ -1,9 +1,8 @@
-using Dev.LeaveApplication.Data.Managers.Interfaces;
 using Dev.LeaveApplication.Web.Helpers;
 using Dev.LeaveApplication.Web.Managers.Interfaces;
 using Dev.LeaveApplication.Web.Models;
+using Dev.LeaveApplication.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 
 namespace Dev.LeaveApplication.Web.Controllers
@@ -11,16 +10,19 @@ namespace Dev.LeaveApplication.Web.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
-		private readonly IEmployeeManager _employeeManager;
+		private readonly IEmployeeService _employeeService;
 		private readonly IFormService _formService;
+		private readonly IUserService _userService;
 
 		public HomeController(ILogger<HomeController> logger,
-			IEmployeeManager employeeManager,
-			IFormService formService)
+			IEmployeeService employeeService,
+			IFormService formService,
+			IUserService userService)
 		{
 			_logger = logger;
-			_employeeManager = employeeManager;
+			_employeeService = employeeService;
 			_formService = formService;
+			_userService = userService;
 		}
 
 		public IActionResult Index()
@@ -41,21 +43,9 @@ namespace Dev.LeaveApplication.Web.Controllers
 
 		public IActionResult Form(FormEditViewModel model)
 		{
-			var employees = _employeeManager.GetAllEmployees()
-				.Select(x => new SelectListItem
-				{
-					Value = x.EmployeeId.ToString(),
-					Text = x.EmployeeName
-				});
-			var managers = _employeeManager.GetAllManagers()
-				.Select(x => new SelectListItem
-				{
-					Value = x.EmployeeId.ToString(),
-					Text = x.EmployeeName
-				});
-
-			model.Employees = employees;
-			model.Managers = managers;
+			model.EmployeeId = _userService.GetSignedInId(HttpContext);
+			model.Employees = _employeeService.GetAllEmployees();
+			model.Managers = _employeeService.GetAllManagers();
 
 			return View(model);
 		}
@@ -63,6 +53,8 @@ namespace Dev.LeaveApplication.Web.Controllers
 		[HttpPost]
 		public IActionResult SubmitForm(FormEditViewModel model)
 		{
+			model.EmployeeId = _userService.GetSignedInId(HttpContext);
+
 			if (!ModelState.IsValid)
 				return RedirectToAction("Form", model);
 
@@ -83,14 +75,14 @@ namespace Dev.LeaveApplication.Web.Controllers
 		[HttpGet]
 		private void GetAllApplications()
 		{
-			ViewBag.Applications = _formService.GetAllApplications();
+			ViewBag.Applications = _formService.GetAllApplications(HttpContext);
 		}
 
 		[HttpPost]
 		public IActionResult ApproveForm([FromBody] Guid applicationId)
 		{
-			//TODO: Get the manager employee id from the logged in user
-			Guid managerEmployeeId = Guid.Empty;
+			//Get the manager employee id from the logged in user
+			Guid managerEmployeeId = _userService.GetSignedInId(HttpContext);
 
 			_formService.ApproveLeaveApplicationForm(applicationId, managerEmployeeId);
 
@@ -102,8 +94,8 @@ namespace Dev.LeaveApplication.Web.Controllers
 		[HttpPost]
 		public IActionResult RejectForm([FromBody] Guid applicationId)
 		{
-			//TODO: Get the manager employee id from the logged in user
-			Guid managerEmployeeId = Guid.Empty;
+			//Get the manager employee id from the logged in user
+			Guid managerEmployeeId = _userService.GetSignedInId(HttpContext);
 
 			_formService.RejectLeaveApplicationForm(applicationId, managerEmployeeId);
 

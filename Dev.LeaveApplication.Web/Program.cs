@@ -33,6 +33,7 @@ builder.Services.AddScoped<IUserManager, UserManager>();
 builder.Services.AddScoped<IFormService, FormService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 
 //AutoMapper

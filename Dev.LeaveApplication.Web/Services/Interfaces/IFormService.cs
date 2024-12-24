@@ -5,7 +5,7 @@ namespace Dev.LeaveApplication.Web.Managers.Interfaces;
 public interface IFormService
 {
 	bool SubmitLeaveApplicationForm(FormEditViewModel model);
-	List<ApprovalEditViewModel> GetAllApplications();
+	List<ApprovalEditViewModel> GetAllApplications(HttpContext httpContext);
 	bool ApproveLeaveApplicationForm(Guid applicationId, Guid managerEmployeeId);
 	bool RejectLeaveApplicationForm(Guid applicationId, Guid managerEmployeeId);
 }

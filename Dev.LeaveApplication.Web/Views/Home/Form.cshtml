@@ -9,7 +9,7 @@
 	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 	<div class="form-floating mb-3">
-		@Html.DropDownListFor(m => m.EmployeeId, Model.Employees, new { @class = "form-select", @placeholder = "EmployeeId" })
+		@Html.DropDownListFor(m => m.EmployeeId, Model.Employees, new { @class = "form-select", @placeholder = "EmployeeId", @disabled = "disabled" })
 		@Html.LabelFor(m => m.EmployeeId)
 		@Html.ValidationMessageFor(m => m.EmployeeId, "", new { @class = "text-danger" })
 	</div>
