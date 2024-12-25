@@ -1,8 +1,71 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+
+    var applications = ViewBag.EmployeeApplications as List<Dev.LeaveApplication.Web.Models.ApprovalEditViewModel>;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+
+    <h2>MY LEAVE PAGE</h2>
+
+
+    <h4>Leave balance</h4>
+
+
+
+
+
+
+
+
+
+
+    <h3>My Leave Applications</h3>
+
+
+    <table class="table table-bordered">
+
+        <thead>
+            <tr>
+                <th width="10%">Application Id</th>
+                <th width="11%">Start Date and Time</th>
+                <th width="11%">End Date and Time</th>
+                <th>Justification</th>
+                <th width="15%">Manager Name</th>
+                <th width="10%">Status</th>
+                <th width="11%">Created Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @if(applications != null)
+            {
+                @foreach(var itm in applications)
+                {
+                    <tr>
+						<td style="text-transform:uppercase;">@itm.ApplicationId</td>
+						<td>@itm.StartDatetime</td>
+						<td>@itm.EndDatetime</td>
+						<td>@itm.Justification</td>
+                        <td>@itm.ManagerName</td>
+						<td>@itm.Status</td>
+						<td>@itm.CreatedDate</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+
+    </table>
+
+
+
+
+
+
+
+
+
+
 </div>

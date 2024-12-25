@@ -77,6 +77,33 @@ public class FormService : IFormService
 		return list;
 	}
 
+	public List<ApprovalEditViewModel> GetApplicationsByEmployee(HttpContext httpContext)
+	{
+		var applications = _formManager.GetAllApplications();
+		var employees = _employeeManager.GetAllEmployees();
+		var employeeId = _userService.GetSignedInId(httpContext);
+
+		var list = (from application in applications
+					join manager in employees on application.ManagerEmployeeId equals manager.EmployeeId
+					where application.EmployeeId.Equals(employeeId)
+					select new ApprovalEditViewModel
+					{
+						ApplicationId = application.ApplicationId,
+						EmployeeId = application.EmployeeId,
+						StartDatetime = application.StartDatetime,
+						EndDatetime = application.EndDatetime,
+						Justification = application.Justification,
+						ManagerName = manager.EmployeeName,
+						CreatedDate = application.CreatedDate,
+						LastModifiedDate = application.LastModifiedDate,
+						Status = application.Status
+					})
+					.OrderByDescending(x => x.CreatedDate)
+					.ToList();
+
+		return list;
+	}
+
 	public bool RejectLeaveApplicationForm(Guid applicationId, Guid managerEmployeeId)
 	{
 		var formModel = _formManager.FindApplicationById(applicationId);

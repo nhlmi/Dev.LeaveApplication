@@ -27,6 +27,8 @@ namespace Dev.LeaveApplication.Web.Controllers
 
 		public IActionResult Index()
 		{
+			GetApplicationsByEmployee();
+
 			return View();
 		}
 
@@ -85,6 +87,12 @@ namespace Dev.LeaveApplication.Web.Controllers
 		private void GetAllApplications()
 		{
 			ViewBag.Applications = _formService.GetAllApplications(HttpContext);
+		}
+
+		[HttpGet]
+		private void GetApplicationsByEmployee()
+		{
+			ViewBag.EmployeeApplications = _formService.GetApplicationsByEmployee(HttpContext);
 		}
 
 		[HttpPost]
