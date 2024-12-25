@@ -1,36 +1,41 @@
-﻿
+﻿@using Dev.LeaveApplication.Data.Shared;
+
  @{
 	var applications = ViewBag.Applications as List<Dev.LeaveApplication.Web.Models.ApprovalEditViewModel>;
  }
 
 <h3>Leave Application List</h3>
 
+<div class="ms-auto" style="width:30%;">
+	<input class="form-control" id="searchInput" type="text" placeholder="Search.."><br/>
+</div>
 
-<table id="approvalTable" class="table table-bordered">
+
+<table class="table table-bordered">
 
 	<thead>
 		<tr>
 
-			<th>Application Id</th>
+			<th width="10%">Application Id</th>
 			<th>Employee Name</th>
-			<th>Start Date and Time</th>
-			<th>End Date and Time</th>
-			<th>Justification</th>
+			<th width="11%">Start Date and Time</th>
+			<th width="11%">End Date and Time</th>
+			<th width="20%">Justification</th>
 			<th>Status</th>
-			<th>Created Date</th>
-			<th>Actions</th>
+			<th width="11%">Created Date</th>
+			<th width="12%">Actions</th>
 
 		</tr>
 	</thead>
 
-	<tbody>
+	<tbody id="approvalTable">
 
 		@if (applications != null)
 		{
 			@foreach (var itm in applications)
 			{
 				<tr>
-					<td>@itm.ApplicationId</td>
+					<td style="text-transform:uppercase;">@itm.ApplicationId</td>
 					<td>@itm.EmployeeName</td>
 					<td>@itm.StartDatetime</td>
 					<td>@itm.EndDatetime</td>
@@ -38,8 +43,8 @@
 					<td>@itm.Status</td>
 					<td>@itm.CreatedDate</td>
 					<td>
-						<button class="btn btn-success btn-sm approveButton" type="button" data-id="@itm.ApplicationId">Approve</button>
-						<button class="btn btn-danger btn-sm rejectButton" type="button" data-id="@itm.ApplicationId">Reject</button>
+						<button class="btn btn-success btn-sm approveButton" type="button" data-id="@itm.ApplicationId" disabled="@(!itm.Status.Equals(LeaveStatus.Submitted))">Approve</button>
+						<button class="btn btn-danger btn-sm rejectButton" type="button" data-id="@itm.ApplicationId" disabled="@(!itm.Status.Equals(LeaveStatus.Submitted))">Reject</button>
 					</td>
 				</tr>
 			}
@@ -83,6 +88,14 @@
 				error: function(xhr, status, error) {
 				}
 			});
+		});
+
+		$("#searchInput").on("keyup", function() {
+		  var value = $(this).val().toLowerCase();
+
+		  $("#approvalTable tr").filter(function() {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		  });
 		});
 	});
 </script>

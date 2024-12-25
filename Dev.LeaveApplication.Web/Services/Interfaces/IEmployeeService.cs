@@ -4,6 +4,6 @@ namespace Dev.LeaveApplication.Web.Services.Interfaces;
 
 public interface IEmployeeService
 {
-	IEnumerable<SelectListItem> GetAllManagers();
+	IEnumerable<SelectListItem> GetAllManagers(Guid employeeId);
 	IEnumerable<SelectListItem> GetAllEmployees();
 }

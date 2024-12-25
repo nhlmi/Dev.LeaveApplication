@@ -41,11 +41,15 @@ namespace Dev.LeaveApplication.Web.Controllers
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 
-		public IActionResult Form(FormEditViewModel model)
+		public IActionResult Form()
 		{
-			model.EmployeeId = _userService.GetSignedInId(HttpContext);
-			model.Employees = _employeeService.GetAllEmployees();
-			model.Managers = _employeeService.GetAllManagers();
+			var employeeId = _userService.GetSignedInId(HttpContext);
+			FormEditViewModel model = new()
+			{
+				EmployeeId = employeeId,
+				Employees = _employeeService.GetAllEmployees(),
+				Managers = _employeeService.GetAllManagers(employeeId)
+			};
 
 			return View(model);
 		}
@@ -56,7 +60,12 @@ namespace Dev.LeaveApplication.Web.Controllers
 			model.EmployeeId = _userService.GetSignedInId(HttpContext);
 
 			if (!ModelState.IsValid)
-				return RedirectToAction("Form", model);
+			{
+				model.Employees = _employeeService.GetAllEmployees();
+				model.Managers = _employeeService.GetAllManagers(model.EmployeeId);
+
+				return View("Form", model);
+			}
 
 			_formService.SubmitLeaveApplicationForm(model);
 

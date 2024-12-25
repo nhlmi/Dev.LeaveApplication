@@ -1,4 +1,5 @@
 ﻿using Dev.LeaveApplication.Data.Shared;
+using Dev.LeaveApplication.Web.Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
@@ -21,6 +22,7 @@ public class FormEditViewModel
 
 	[Required]
 	[Display(Name = "End Date and Time")]
+	[DateGreaterThan("StartDatetime")]
 	[DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]
 	public DateTime EndDatetime { get; set; } = DateTime.Now;
 

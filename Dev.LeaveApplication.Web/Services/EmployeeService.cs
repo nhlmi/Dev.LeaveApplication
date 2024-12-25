@@ -23,9 +23,10 @@ public class EmployeeService : IEmployeeService
 			});
 	}
 
-	public IEnumerable<SelectListItem> GetAllManagers()
+	public IEnumerable<SelectListItem> GetAllManagers(Guid employeeId)
 	{
 		return _employeeManager.GetAllManagers()
+			.Where(x => !x.EmployeeId.Equals(employeeId))
 			.Select(x => new SelectListItem
 			{
 				Value = x.EmployeeId.ToString(),

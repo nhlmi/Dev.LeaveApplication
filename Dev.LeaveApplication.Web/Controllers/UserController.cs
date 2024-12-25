@@ -15,6 +15,9 @@ public class UserController : Controller
 	[HttpGet]
 	public IActionResult SignIn()
 	{
+		if(HttpContext.User.Identity.IsAuthenticated)
+			return RedirectToAction("Index", "Home");
+
 		return View();
 	}
 
