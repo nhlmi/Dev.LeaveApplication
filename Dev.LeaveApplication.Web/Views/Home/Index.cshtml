@@ -1,26 +1,25 @@
 ﻿@using Dev.LeaveApplication.Data.Shared;
+@inject IConfiguration Configuration
 @{
     ViewData["Title"] = "Home Page";
 
     var applications = ViewBag.EmployeeApplications as List<Dev.LeaveApplication.Web.Models.ApprovalEditViewModel>;
+    var maximumLeave = Configuration.GetValue<int>("Leaves:Maximum");
+    var usedLeave = applications.Where(x => x.Status.Equals(LeaveStatus.Approved)).Count();
+    var balanceLeave = maximumLeave - usedLeave;
 }
 
 <div>
 
-    <h2>MY LEAVE PAGE</h2>
+    <h2>MY LEAVE PAGE</h2><br/>
 
+    <div class="mb-3" style="padding-left: 15px;">
+        <h4>Total leave: @maximumLeave day(s)</h4>
+        <h4>Used leave: @usedLeave day(s)</h4>
+        <h4>Remaining leave: @balanceLeave day(s)</h4>
+    </div>
 
-    <h4>Leave balance</h4>
-
-
-
-
-
-
-
-
-
-
+    
     <h3>My Leave Applications</h3>
 
     <div class="ms-auto mb-3" style="width:30%;">
