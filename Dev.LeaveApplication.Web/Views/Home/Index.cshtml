@@ -59,7 +59,7 @@
                             <button class="btn btn-danger btn-sm withdrawButton" type="button" data-id="@itm.ApplicationId" 
                                 disabled="@(
                                     (DateTime.Today > itm.StartDatetime.Date)
-                                    || (DateTime.Today < itm.StartDatetime.Date
+                                    || (DateTime.Today <= itm.StartDatetime.Date
                                        && itm.Status.Equals(LeaveStatus.Rejected)
                                     || itm.Status.Equals(LeaveStatus.Withdrawn))
                                     )">
