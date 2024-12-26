@@ -8,5 +8,6 @@ public interface IFormService
 	List<ApprovalEditViewModel> GetAllApplications(HttpContext httpContext);
 	bool ApproveLeaveApplicationForm(Guid applicationId, Guid managerEmployeeId);
 	bool RejectLeaveApplicationForm(Guid applicationId, Guid managerEmployeeId);
+	bool WithdrawLeaveApplicationForm(Guid applicationId, Guid employeeId);
 	List<ApprovalEditViewModel> GetApplicationsByEmployee(HttpContext httpContext);
 }

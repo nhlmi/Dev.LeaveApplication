@@ -71,7 +71,7 @@ namespace Dev.LeaveApplication.Web.Controllers
 
 			_formService.SubmitLeaveApplicationForm(model);
 
-			return View("Index");
+			return RedirectToAction("Index");
 		}
 
 		[ManagerAuth]
@@ -119,6 +119,19 @@ namespace Dev.LeaveApplication.Web.Controllers
 			GetAllApplications();
 
 			return View("Approval");
+		}
+
+		[HttpPost]
+		public IActionResult WithdrawForm([FromBody] Guid applicationId)
+		{
+			//Get the employee id from the logged in user
+			Guid employeeId = _userService.GetSignedInId(HttpContext);
+
+			_formService.WithdrawLeaveApplicationForm(applicationId, employeeId);
+
+			GetApplicationsByEmployee();
+
+			return View("Index");
 		}
 	}
 }

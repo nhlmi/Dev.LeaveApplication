@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Dev.LeaveApplication.Data.Shared;
+@{
     ViewData["Title"] = "Home Page";
 
     var applications = ViewBag.EmployeeApplications as List<Dev.LeaveApplication.Web.Models.ApprovalEditViewModel>;
@@ -22,6 +23,9 @@
 
     <h3>My Leave Applications</h3>
 
+    <div class="ms-auto mb-3" style="width:30%;">
+        <input class="form-control" id="searchInput" type="text" placeholder="Search..">
+    </div>
 
     <table class="table table-bordered">
 
@@ -34,10 +38,11 @@
                 <th width="15%">Manager Name</th>
                 <th width="10%">Status</th>
                 <th width="11%">Created Date</th>
+                <th width="10%">Action</th>
             </tr>
         </thead>
 
-        <tbody>
+        <tbody id="leaveTable">
 
             @if(applications != null)
             {
@@ -51,6 +56,17 @@
                         <td>@itm.ManagerName</td>
 						<td>@itm.Status</td>
 						<td>@itm.CreatedDate</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm withdrawButton" type="button" data-id="@itm.ApplicationId" 
+                                disabled="@(
+                                    (DateTime.Today > itm.StartDatetime.Date)
+                                    || (DateTime.Today < itm.StartDatetime.Date
+                                       && itm.Status.Equals(LeaveStatus.Rejected)
+                                    || itm.Status.Equals(LeaveStatus.Withdrawn))
+                                    )">
+                                Withdraw
+                            </button>
+                        </td>
                     </tr>
                 }
             }
@@ -59,13 +75,37 @@
 
     </table>
 
-
-
-
-
-
-
-
-
-
 </div>
+
+
+
+
+<script>
+	$(document).ready(function() {
+        $('.withdrawButton').on('click', function() {
+			var applicationId = $(this).data('id');
+
+			console.log(applicationId);
+
+			$.ajax({
+				url: '@Url.Action("WithdrawForm", "Home")',
+				type: 'POST',
+				data: JSON.stringify(applicationId),
+				contentType: 'application/json',
+				success: function(data) {
+					location.reload();
+				},
+				error: function(xhr, status, error) {
+				}
+			});
+		});
+
+		$("#searchInput").on("keyup", function() {
+		  var value = $(this).val().toLowerCase();
+
+          $("#leaveTable tr").filter(function() {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		  });
+		});
+	});
+</script>

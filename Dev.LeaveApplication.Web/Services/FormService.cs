@@ -147,6 +147,27 @@ public class FormService : IFormService
 		return result;
 	}
 
+	public bool WithdrawLeaveApplicationForm(Guid applicationId, Guid employeeId)
+	{
+		var formModel = _formManager.FindApplicationById(applicationId);
+		if (formModel == null) return false;
+
+		formModel.Status = LeaveStatus.Withdrawn;
+		formModel.LastModifiedDate = DateTime.Now;
+		formModel.LastModifiedBy = employeeId;
+
+		var result = UpdateLeaveApplicationFormStatus(formModel);
+		if (!result) return false;
+
+		//Send Email to Employee
+		var employee = _employeeManager.FindEmployeeById(formModel.EmployeeId);
+		if (employee == null) return false;
+
+		_emailService.SendEmailAsync(employee.Email, "Leave Application Withdraw", "You have withdraw your leave application.");
+
+		return result;
+	}
+
 	private bool UpdateLeaveApplicationFormStatus(FormModel model)
 	{
 		return _formManager.UpdateLeaveApplicationForm(model);

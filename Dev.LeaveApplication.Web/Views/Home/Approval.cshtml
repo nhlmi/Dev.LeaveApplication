@@ -43,8 +43,14 @@
 					<td>@itm.Status</td>
 					<td>@itm.CreatedDate</td>
 					<td>
-						<button class="btn btn-success btn-sm approveButton" type="button" data-id="@itm.ApplicationId" disabled="@(!itm.Status.Equals(LeaveStatus.Submitted))">Approve</button>
-						<button class="btn btn-danger btn-sm rejectButton" type="button" data-id="@itm.ApplicationId" disabled="@(!itm.Status.Equals(LeaveStatus.Submitted))">Reject</button>
+						<button class="btn btn-success btn-sm approveButton" type="button" data-id="@itm.ApplicationId" 
+							disabled="@(!itm.Status.Equals(LeaveStatus.Submitted) || DateTime.Today > itm.StartDatetime.Date)">
+							Approve
+						</button>
+						<button class="btn btn-danger btn-sm rejectButton" type="button" data-id="@itm.ApplicationId" 
+							disabled="@(!itm.Status.Equals(LeaveStatus.Submitted) || DateTime.Today > itm.StartDatetime.Date)">
+							Reject
+						</button>
 					</td>
 				</tr>
 			}
