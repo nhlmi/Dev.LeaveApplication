@@ -45,7 +45,8 @@ public class FormService : IFormService
 		var employee = _employeeManager.FindEmployeeById(formModel.EmployeeId);
 		if(employee == null) return false;
 
-		_emailService.SendEmailAsync(employee.Email, "Leave Application Approved", "Your leave application has been approved.");
+		_emailService.SendEmailAsync(employee.Email, formModel.Status, formModel);
+		//_emailService.SendEmailAsync(employee.Email, "Leave Application Approved", "Your leave application has been approved.");
 
 		return result;
 	}
@@ -120,7 +121,8 @@ public class FormService : IFormService
 		var employee = _employeeManager.FindEmployeeById(formModel.EmployeeId);
 		if (employee == null) return false;
 
-		_emailService.SendEmailAsync(employee.Email, "Leave Application Rejected", "Your leave application has been rejected.");
+		_emailService.SendEmailAsync(employee.Email, formModel.Status, formModel);
+		//_emailService.SendEmailAsync(employee.Email, "Leave Application Rejected", "Your leave application has been rejected.");
 
 		return result;
 	}
@@ -142,7 +144,8 @@ public class FormService : IFormService
 		var manager = _employeeManager.FindEmployeeById(model.ManagerEmployeeId);
 		if (manager == null) return false;
 
-		_emailService.SendEmailAsync(manager.Email, "Leave Application Submitted", "A new leave application has been submitted.");
+		_emailService.SendEmailAsync(manager.Email, formModel.Status, formModel);
+		//_emailService.SendEmailAsync(manager.Email, "Leave Application Submitted", "A new leave application has been submitted.");
 
 		return result;
 	}
@@ -163,7 +166,8 @@ public class FormService : IFormService
 		var employee = _employeeManager.FindEmployeeById(formModel.EmployeeId);
 		if (employee == null) return false;
 
-		_emailService.SendEmailAsync(employee.Email, "Leave Application Withdraw", "You have withdraw your leave application.");
+		_emailService.SendEmailAsync(employee.Email, formModel.Status, formModel);
+		//_emailService.SendEmailAsync(employee.Email, "Leave Application Withdraw", "You have withdraw your leave application.");
 
 		return result;
 	}
